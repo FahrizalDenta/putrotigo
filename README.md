@@ -1,4 +1,4 @@
-# Junior Fullstack Developer Technical Test - Putro Tigo
+# Junior Fullstack Developer Technical Test - Fahrizal Denta Saputra
 
 ## 📌 Overview
 Repository ini merupakan hasil pengerjaan Technical Test untuk posisi **Junior Fullstack Developer**. Project ini mencakup implementasi logika pemrograman menggunakan Python serta pengembangan aplikasi web berbasis React untuk kebutuhan UMKM.
