@@ -4,7 +4,7 @@ Repository ini berisi jawaban untuk Technical Test posisi Junior Fullstack Devel
 
 ## 🔗 Demo Link
 Website untuk Case 3 telah di-deploy dan dapat diakses di:
-**[https://putrotigo.vercel.app](https://putrotigo.vercel.app)** *(Ganti dengan link Vercel asli kamu)*
+**[https://putrotigo.vercel.app](https://putrotigo.vercel.app)**
 
 ---
 
