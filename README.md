@@ -1,16 +1,21 @@
-# React + Vite
+# Junior Fullstack Technical Test - Fahrizal Denta Saputra
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Repository ini berisi jawaban untuk Technical Test posisi Junior Fullstack Developer. Proyek ini mencakup logika pengolahan data menggunakan Python dan pembuatan website landing page menggunakan React.
 
-Currently, two official plugins are available:
+## 🔗 Demo Link
+Website untuk Case 3 telah di-deploy dan dapat diakses di:
+**[https://putrotigo.vercel.app](https://putrotigo.vercel.app)** *(Ganti dengan link Vercel asli kamu)*
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 📂 Struktur Folder
+```text
+.
+├── backend/
+│   ├── case1.py        # Jawaban Case 1 (Manajemen Buah)
+│   └── case2.py        # Jawaban Case 2 (Perhitungan Komentar Rekursif)
+├── putro-tigo/         # Jawaban Case 3 (Website UMKM - Putro Tigo)
+│   ├── src/
+│   ├── public/
+│   └── package.json
+└── README.md
