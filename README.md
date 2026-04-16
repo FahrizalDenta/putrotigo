@@ -1,21 +1,36 @@
-# Junior Fullstack Technical Test - Fahrizal Denta Saputra
+# Junior Fullstack Developer Technical Test - Putro Tigo
 
-Repository ini berisi jawaban untuk Technical Test posisi Junior Fullstack Developer. Proyek ini mencakup logika pengolahan data menggunakan Python dan pembuatan website landing page menggunakan React.
-
-## 🔗 Demo Link
-Website untuk Case 3 telah di-deploy dan dapat diakses di:
-**[https://putrotigo.vercel.app](https://putrotigo.vercel.app)**
+## 📌 Overview
+Repository ini merupakan hasil pengerjaan Technical Test untuk posisi **Junior Fullstack Developer**. Project ini mencakup implementasi logika pemrograman menggunakan Python serta pengembangan aplikasi web berbasis React untuk kebutuhan UMKM.
 
 ---
 
-## 📂 Struktur Folder
+## 🔗 Live Demo (Case 3 - Putro Tigo)
+Aplikasi Case 3 telah berhasil di-deploy dan dapat diakses melalui:
+
+👉 https://putrotigo.vercel.app
+
+Aplikasi ini merupakan landing page UMKM yang dibangun menggunakan React + Vite dengan tujuan menampilkan informasi produk dan profil usaha secara interaktif.
+
+---
+
+## ⚠️ Known Issue (Case 3)
+Pada versi deployment saat ini, terdapat kendala pada fitur menu dimana beberapa data tidak dapat ditampilkan atau diakses secara optimal. Permasalahan terjadi pada tahap integrasi frontend dan backend pada environment deployment, sehingga beberapa fitur menu belum dapat berjalan optimal
+---
+
+## 📂 Project Structure
+
 ```text
 .
 ├── backend/
-│   ├── case1.py        # Jawaban Case 1 (Manajemen Buah)
-│   └── case2.py        # Jawaban Case 2 (Perhitungan Komentar Rekursif)
-├── putro-tigo/         # Jawaban Case 3 (Website UMKM - Putro Tigo)
-│   ├── src/
-│   ├── public/
-│   └── package.json
+│   ├── case1.py        # Case 1 - Data Processing (Fruit Management)
+│   ├── case2.py        # Case 2 - Algorithm / Recursive Logic
+│   └── server.js       # Backend service (optional)
+│
+├── src/                # React frontend source code
+├── public/             # Static assets
+├── index.html
+├── package.json
+├── vite.config.js
+├── vercel.json
 └── README.md
