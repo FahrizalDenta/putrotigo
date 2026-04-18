@@ -1,21 +1,34 @@
-import { X, Trash2, Plus, Minus, ShoppingBag, MessageCircle } from 'lucide-react';
+import { X, Trash2, Plus, Minus, ShoppingBag, MessageCircle, MapPin, User } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Cart({ isOpen, onClose, items, total, onUpdateQuantity, onRemove, onClear }) {
-  // State untuk memilih admin mana yang akan dihubungi
+  // State Identitas & Pengiriman
+  const [customerName, setCustomerName] = useState("");
+  const [address, setAddress] = useState("");
+  const [region, setRegion] = useState("Semarang Timur");
   const [selectedAdmin, setSelectedAdmin] = useState("admin1");
 
+  // Konfigurasi Admin & Ongkir
   const admins = [
     { id: "admin1", name: "Admin 1", wa: "628159516543" },
     { id: "admin2", name: "Admin 2", wa: "6282116552216" }
   ];
 
+  const regionRates = {
+    "Semarang Timur": 0,
+    "Semarang Tengah": 5000,
+    "Semarang Barat": 10000,
+    "Semarang Selatan": 10000,
+  };
+
+  const shippingCost = regionRates[region] || 0;
+  const grandTotal = total + shippingCost;
+
   const formatPrice = (price) =>
     new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(price);
 
-  // Fungsi untuk scroll ke menu dan tutup keranjang
   const handleLihatMenu = () => {
-    onClose(); // Tutup sidebar
+    onClose();
     const menuSection = document.getElementById('menu');
     if (menuSection) {
       menuSection.scrollIntoView({ behavior: 'smooth' });
@@ -26,11 +39,28 @@ export default function Cart({ isOpen, onClose, items, total, onUpdateQuantity, 
     const lines = items.map(
       item => `- ${item.nama} x${item.quantity} = ${formatPrice(item.harga * item.quantity)}`
     );
-    const message = `Halo Warung Padang Putro Tigo!\nSaya ingin memesan:\n\n${lines.join('\n')}\n\nTotal: ${formatPrice(total)}\n\nTerima kasih!`;
+
+    const message = `*PESANAN BARU - PUTRO TIGO* 🍱\n` +
+      `----------------------------------\n` +
+      `*Nama:* ${customerName || '-'}\n` +
+      `*Alamat:* ${address || '-'}\n` +
+      `*Wilayah:* ${region}\n` +
+      `----------------------------------\n` +
+      `*Detail Pesanan:*\n${lines.join('\n')}\n\n` +
+      `*Total Menu:* ${formatPrice(total)}\n` +
+      `*Ongkos Kirim:* ${formatPrice(shippingCost)}\n` +
+      `*TOTAL BAYAR:* ${formatPrice(grandTotal)}\n` +
+      `----------------------------------\n` +
+      `Mohon segera diproses, terima kasih!`;
+
     return encodeURIComponent(message);
   };
 
   const handleOrder = () => {
+    if (!customerName || !address) {
+      alert("Mohon lengkapi Nama dan Alamat terlebih dahulu!");
+      return;
+    }
     const admin = admins.find(a => a.id === selectedAdmin);
     const url = `https://wa.me/${admin.wa}?text=${buildWhatsAppMessage()}`;
     window.open(url, '_blank');
@@ -48,7 +78,7 @@ export default function Cart({ isOpen, onClose, items, total, onUpdateQuantity, 
         }`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-5 bg-[#990000] text-white">
+        <div className="flex items-center justify-between px-6 py-5 bg-[#990000] text-white shadow-lg">
           <div className="flex items-center gap-2">
             <ShoppingBag className="w-5 h-5 text-[#FFCC00]" />
             <h2 className="text-lg font-bold">Keranjang Pesanan</h2>
@@ -64,7 +94,7 @@ export default function Cart({ isOpen, onClose, items, total, onUpdateQuantity, 
                <ShoppingBag className="w-10 h-10 text-gray-200" />
             </div>
             <p className="text-lg font-bold text-gray-900">Wah, keranjang kosong!</p>
-            <p className="text-sm text-center mt-2">Perut lapar butuh diisi, yuk pilih menu favoritmu dulu.</p>
+            <p className="text-sm text-center mt-2 text-gray-500">Pilih menu favoritmu di halaman utama.</p>
             <button 
               onClick={handleLihatMenu} 
               className="mt-8 bg-[#CC0000] text-white px-10 py-3 rounded-full font-black shadow-lg shadow-red-100 transform active:scale-95 transition-all"
@@ -75,7 +105,7 @@ export default function Cart({ isOpen, onClose, items, total, onUpdateQuantity, 
         ) : (
           <>
             {/* List Item */}
-            <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
+            <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 bg-gray-50/50">
               {items.map(item => (
                 <div key={item.id} className="flex gap-3 bg-white rounded-2xl p-3 border border-gray-100 shadow-sm">
                   <img src={item.image} alt={item.nama} className="w-16 h-16 object-cover rounded-xl" />
@@ -93,12 +123,49 @@ export default function Cart({ isOpen, onClose, items, total, onUpdateQuantity, 
               ))}
             </div>
 
-            {/* Footer Keranjang */}
-            <div className="p-6 border-t bg-gray-50 rounded-t-[2rem] shadow-[0_-10px_30px_rgba(0,0,0,0.03)]">
+            {/* Form Data & Footer */}
+            <div className="p-6 border-t bg-white rounded-t-[2.5rem] shadow-[0_-15px_40px_rgba(0,0,0,0.05)]">
               
-              {/* FITUR PILIH ADMIN */}
-              <div className="mb-6 text-left">
-                <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1 mb-2 block">Kirim Pesanan Ke:</label>
+              {/* INPUT IDENTITAS */}
+              <div className="space-y-3 mb-6">
+                <div className="relative">
+                  <User className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                  <input 
+                    type="text" 
+                    placeholder="Nama Anda"
+                    className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:ring-2 focus:ring-red-500 outline-none transition-all"
+                    value={customerName}
+                    onChange={(e) => setCustomerName(e.target.value)}
+                  />
+                </div>
+                <div className="relative">
+                  <MapPin className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                  <textarea 
+                    placeholder="Alamat Pengiriman (Jalan, No Rumah, RT/RW)"
+                    className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:ring-2 focus:ring-red-500 outline-none transition-all h-16"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                  />
+                </div>
+                
+                {/* SELECT WILAYAH */}
+                <div className="bg-gray-50 rounded-xl px-3 py-2 border border-gray-100">
+                  <label className="text-[10px] font-black uppercase text-gray-400 block mb-1">Wilayah / Ongkir</label>
+                  <select 
+                    className="w-full bg-transparent border-none text-sm font-bold focus:ring-0 outline-none cursor-pointer"
+                    value={region}
+                    onChange={(e) => setRegion(e.target.value)}
+                  >
+                    {Object.keys(regionRates).map(r => (
+                      <option key={r} value={r}>{r} ({regionRates[r] === 0 ? 'Gratis' : `+${formatPrice(regionRates[r])}`})</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* PILIH ADMIN */}
+              <div className="mb-6">
+                <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">Kirim Pesanan Ke:</p>
                 <div className="grid grid-cols-2 gap-2">
                   {admins.map((admin) => (
                     <button
@@ -107,7 +174,7 @@ export default function Cart({ isOpen, onClose, items, total, onUpdateQuantity, 
                       className={`py-2 px-3 rounded-xl text-[11px] font-bold border-2 transition-all ${
                         selectedAdmin === admin.id 
                         ? 'border-[#CC0000] bg-red-50 text-[#CC0000]' 
-                        : 'border-white bg-white text-gray-400'
+                        : 'border-white bg-white text-gray-400 shadow-sm'
                       }`}
                     >
                       {admin.name}
@@ -116,9 +183,22 @@ export default function Cart({ isOpen, onClose, items, total, onUpdateQuantity, 
                 </div>
               </div>
 
-              <div className="flex justify-between items-center mb-4">
-                <span className="font-bold text-gray-500 uppercase text-xs tracking-widest">Estimasi Total</span>
-                <span className="text-2xl font-black text-[#CC0000]">{formatPrice(total)}</span>
+              {/* RINGKASAN HARGA */}
+              <div className="space-y-1 mb-5">
+                <div className="flex justify-between text-xs font-medium text-gray-400">
+                  <span>Subtotal Menu</span>
+                  <span>{formatPrice(total)}</span>
+                </div>
+                <div className="flex justify-between text-xs font-medium text-gray-400">
+                  <span>Ongkos Kirim ({region})</span>
+                  <span className={shippingCost === 0 ? 'text-green-500 font-bold' : ''}>
+                    {shippingCost === 0 ? 'GRATIS' : formatPrice(shippingCost)}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center pt-2 mt-2 border-t border-dashed border-gray-200">
+                  <span className="font-bold text-gray-600 text-sm">TOTAL BAYAR</span>
+                  <span className="text-2xl font-black text-[#CC0000]">{formatPrice(grandTotal)}</span>
+                </div>
               </div>
 
               <button 
