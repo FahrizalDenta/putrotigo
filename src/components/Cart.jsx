@@ -1,9 +1,11 @@
-import { X, Trash2, Plus, Minus, ShoppingBag, MessageCircle, MapPin, User } from 'lucide-react';
+import { X, Trash2, Plus, Minus, ShoppingBag, MessageCircle, MapPin, User, ChevronDown,
+  ChevronUp } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Cart({ isOpen, onClose, items, total, onUpdateQuantity, onRemove, onClear }) {
   // State Identitas & Pengiriman
   const [customerName, setCustomerName] = useState("");
+  const [isFormOpen, setIsFormOpen] = useState(false);
   const [address, setAddress] = useState("");
   const [region, setRegion] = useState("Semarang Timur");
   const [selectedAdmin, setSelectedAdmin] = useState("admin1");
@@ -122,96 +124,165 @@ export default function Cart({ isOpen, onClose, items, total, onUpdateQuantity, 
                 </div>
               ))}
             </div>
-
             {/* Form Data & Footer */}
-            <div className="flex flex-col min-h-0 max-h-[75vh] border-t bg-white rounded-t-[2.5rem] shadow-[0_-15px_40px_rgba(0,0,0,0.05)]">
+            <div className="border-t bg-white rounded-t-[2.5rem] shadow-[0_-15px_40px_rgba(0,0,0,0.05)]">
 
-              {/* Area yang bisa di-scroll */}
-              <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-6">
-                {/* INPUT IDENTITAS */}
-                <div className="space-y-3 mb-6">
-                  <div className="relative">
-                    <User className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
-                    <input 
-                      type="text" 
-                      placeholder="Nama Anda"
-                      className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:ring-2 focus:ring-red-500 outline-none transition-all"
-                      value={customerName}
-                      onChange={(e) => setCustomerName(e.target.value)}
-                    />
+              {/* Header Card Buka/Tutup */}
+              <button
+                type="button"
+                onClick={() => setIsFormOpen(!isFormOpen)}
+                aria-expanded={isFormOpen}
+                className="w-full flex items-center justify-between gap-3 px-6 py-4 text-left"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center">
+                    <User className="w-5 h-5 text-[#CC0000]" />
                   </div>
-                  <div className="relative">
-                    <MapPin className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
-                    <textarea 
-                      placeholder="Alamat Pengiriman (Jalan, No Rumah, RT/RW)"
-                      className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:ring-2 focus:ring-red-500 outline-none transition-all h-16"
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                    />
-                  </div>
-                  
-                  {/* SELECT WILAYAH */}
-                  <div className="bg-gray-50 rounded-xl px-3 py-2 border border-gray-100">
-                    <label className="text-[10px] font-black uppercase text-gray-400 block mb-1">Wilayah / Ongkir</label>
-                    <select 
-                      className="w-full bg-transparent border-none text-sm font-bold focus:ring-0 outline-none cursor-pointer"
-                      value={region}
-                      onChange={(e) => setRegion(e.target.value)}
-                    >
-                      {Object.keys(regionRates).map(r => (
-                        <option key={r} value={r}>{r} ({regionRates[r] === 0 ? 'Gratis' : `+${formatPrice(regionRates[r])}`})</option>
-                      ))}
-                    </select>
+
+                  <div>
+                    <p className="font-bold text-gray-900 text-sm">
+                      Data Pemesan & Pengiriman
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      Nama, alamat, wilayah, dan admin
+                    </p>
                   </div>
                 </div>
 
-                {/* PILIH ADMIN */}
-                <div className="mb-6">
-                  <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">Kirim Pesanan Ke:</p>
-                  <div className="grid grid-cols-2 gap-2">
-                    {admins.map((admin) => (
-                      <button
-                        key={admin.id}
-                        onClick={() => setSelectedAdmin(admin.id)}
-                        className={`py-2 px-3 rounded-xl text-[11px] font-bold border-2 transition-all ${
-                          selectedAdmin === admin.id 
-                          ? 'border-[#CC0000] bg-red-50 text-[#CC0000]' 
-                          : 'border-white bg-white text-gray-400 shadow-sm'
-                        }`}
+                {isFormOpen ? (
+                  <ChevronDown className="w-5 h-5 text-[#CC0000] shrink-0" />
+                ) : (
+                  <ChevronUp className="w-5 h-5 text-[#CC0000] shrink-0" />
+                )}
+              </button>
+
+              {/* Isi Form */}
+              {isFormOpen && (
+                <div className="max-h-[55vh] overflow-y-auto overscroll-contain px-6 pb-6">
+
+                  {/* INPUT IDENTITAS */}
+                  <div className="space-y-3 mb-6">
+
+                    {/* Nama */}
+                    <div className="relative">
+                      <User className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+
+                      <input
+                        type="text"
+                        placeholder="Nama Anda"
+                        className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:ring-2 focus:ring-red-500 outline-none transition-all"
+                        value={customerName}
+                        onChange={(e) => setCustomerName(e.target.value)}
+                      />
+                    </div>
+
+                    {/* Alamat */}
+                    <div className="relative">
+                      <MapPin className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+
+                      <textarea
+                        placeholder="Alamat Pengiriman (Jalan, No Rumah, RT/RW)"
+                        className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:ring-2 focus:ring-red-500 outline-none transition-all h-16 resize-none"
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                      />
+                    </div>
+
+                    {/* PILIH WILAYAH */}
+                    <div className="bg-gray-50 rounded-xl px-3 py-2 border border-gray-100">
+                      <label className="text-[10px] font-black uppercase text-gray-400 block mb-1">
+                        Wilayah / Ongkir
+                      </label>
+
+                      <select
+                        className="w-full bg-transparent border-none text-sm font-bold focus:ring-0 outline-none cursor-pointer"
+                        value={region}
+                        onChange={(e) => setRegion(e.target.value)}
                       >
-                        {admin.name}
-                      </button>
-                    ))}
+                        {Object.keys(regionRates).map((r) => (
+                          <option key={r} value={r}>
+                            {r} (
+                            {regionRates[r] === 0
+                              ? "Gratis"
+                              : `+${formatPrice(regionRates[r])}`}
+                            )
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
-                </div>
 
-                {/* RINGKASAN HARGA */}
-                <div className="space-y-1 mb-5">
-                  <div className="flex justify-between text-xs font-medium text-gray-400">
-                    <span>Subtotal Menu</span>
-                    <span>{formatPrice(total)}</span>
-                  </div>
-                  <div className="flex justify-between text-xs font-medium text-gray-400">
-                    <span>Ongkos Kirim ({region})</span>
-                    <span className={shippingCost === 0 ? 'text-green-500 font-bold' : ''}>
-                      {shippingCost === 0 ? 'GRATIS' : formatPrice(shippingCost)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center pt-2 mt-2 border-t border-dashed border-gray-200">
-                    <span className="font-bold text-gray-600 text-sm">TOTAL BAYAR</span>
-                    <span className="text-2xl font-black text-[#CC0000]">{formatPrice(grandTotal)}</span>
-                  </div>
-                </div>
+                  {/* PILIH ADMIN */}
+                  <div className="mb-6">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2">
+                      Kirim Pesanan Ke:
+                    </p>
 
-                <button 
-                  onClick={handleOrder} 
-                  className="w-full bg-green-500 hover:bg-green-600 text-white font-black py-4 rounded-2xl shadow-xl shadow-green-100 flex items-center justify-center gap-3 transition-all transform active:scale-95 mb-4"
-                >
-                  <MessageCircle size={20} /> PESAN VIA WHATSAPP
-                </button>
-                
-                <button onClick={onClear} className="w-full text-gray-400 text-[10px] font-black uppercase tracking-[0.2em] hover:text-red-600 transition-colors">Kosongkan Keranjang</button>
-              </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      {admins.map((admin) => (
+                        <button
+                          key={admin.id}
+                          type="button"
+                          onClick={() => setSelectedAdmin(admin.id)}
+                          className={`py-2 px-3 rounded-xl text-[11px] font-bold border-2 transition-all ${
+                            selectedAdmin === admin.id
+                              ? "border-[#CC0000] bg-red-50 text-[#CC0000]"
+                              : "border-gray-100 bg-white text-gray-400 shadow-sm"
+                          }`}
+                        >
+                          {admin.name}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* RINGKASAN HARGA */}
+                  <div className="space-y-1 mb-5">
+                    <div className="flex justify-between text-xs font-medium text-gray-400">
+                      <span>Subtotal Menu</span>
+                      <span>{formatPrice(total)}</span>
+                    </div>
+
+                    <div className="flex justify-between text-xs font-medium text-gray-400">
+                      <span>Ongkos Kirim ({region})</span>
+
+                      <span className={shippingCost === 0 ? "text-green-500 font-bold" : ""}>
+                        {shippingCost === 0 ? "GRATIS" : formatPrice(shippingCost)}
+                      </span>
+                    </div>
+
+                    <div className="flex justify-between items-center pt-2 mt-2 border-t border-dashed border-gray-200">
+                      <span className="font-bold text-gray-600 text-sm">
+                        TOTAL BAYAR
+                      </span>
+
+                      <span className="text-2xl font-black text-[#CC0000]">
+                        {formatPrice(grandTotal)}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* PESAN VIA WHATSAPP */}
+                  <button
+                    type="button"
+                    onClick={handleOrder}
+                    className="w-full bg-green-500 hover:bg-green-600 text-white font-black py-4 rounded-2xl shadow-xl shadow-green-100 flex items-center justify-center gap-3 transition-all transform active:scale-95 mb-4"
+                  >
+                    <MessageCircle size={20} />
+                    PESAN VIA WHATSAPP
+                  </button>
+
+                  {/* KOSONGKAN KERANJANG */}
+                  <button
+                    type="button"
+                    onClick={onClear}
+                    className="w-full text-gray-400 text-[10px] font-black uppercase tracking-[0.2em] hover:text-red-600 transition-colors"
+                  >
+                    Kosongkan Keranjang
+                  </button>
+
+                </div>
+              )}
             </div>
           </>
         )}
